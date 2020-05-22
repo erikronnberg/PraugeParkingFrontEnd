@@ -2,7 +2,7 @@
 
 namespace PraugeParkingFrontEnd
 {
-	abstract class Vehicle
+	public abstract class Vehicle
 	{
 		private readonly string regNr;
 		private readonly DateTime entryTime;
@@ -37,7 +37,7 @@ namespace PraugeParkingFrontEnd
 		}
 	}
 
-	class Car : Vehicle
+	public class Car : Vehicle
 	{
 		public override int Size { get { return 100; } }
 		public override string Type { get { return "CAR"; } }
@@ -60,7 +60,7 @@ namespace PraugeParkingFrontEnd
 		}
 	}
 
-	class Motorcycle : Vehicle
+	public class Motorcycle : Vehicle
 	{
 		public override int Size { get { return 50; } }
 		public override string Type { get { return "MC"; } }

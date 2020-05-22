@@ -114,7 +114,7 @@ namespace PraugeParkingFrontEnd
 			Application.Exit();
 		}
 
-		private void parkNewToolStripMenuItem_Click(object sender, EventArgs e)
+		private void Park()
 		{
 			string regNr = Input();
 			if (rbnCar.Checked == true && string.IsNullOrWhiteSpace(file) != true)
@@ -133,12 +133,12 @@ namespace PraugeParkingFrontEnd
 			FillTableLayout();
 		}
 
-		private void moveVehicleToolStripMenuItem_Click(object sender, EventArgs e)
+		private void MoveVehicle()
 		{
 			string regNr = Input();
 			int originalPosition = parking.SearchVehicle(regNr); //kollar om den finns
-            if (originalPosition >= 0)
-            {
+			if (originalPosition >= 0)
+			{
 				int spot = parking.RemoveVehicle(regNr, out Vehicle vehicle); //får ut vehicle object genom att remove'a
 				Motorcycle _temp = new Motorcycle("_TEMP");
 				parking.AddVehicle(_temp, spot);
@@ -158,6 +158,16 @@ namespace PraugeParkingFrontEnd
 				ShowLot();
 				FillTableLayout();
 			}
+		}
+
+		private void parkNewToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Park();
+		}
+
+		private void moveVehicleToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			MoveVehicle();
         }
 
 		private void searchVehicleToolStripMenuItem_Click(object sender, EventArgs e)
@@ -214,6 +224,32 @@ namespace PraugeParkingFrontEnd
 
         public void SpotClicked(object sender, EventArgs e)
 		{
+			using (DialogForm dialog = new DialogForm())
+            {
+				if (dialog.ShowDialog() == DialogResult.OK)
+                {
+					if (DialogForm.SelectedButton == "Add")
+					{
+						if (dialog.car != null)
+							parking.AddVehicle(dialog.car);
+						if (dialog.mc != null)
+							parking.AddVehicle(dialog.mc);
+					}
+					else if (DialogForm.SelectedButton == "Remove")
+					{
+						string regNr = Input();
+						parking.RemoveVehicle(regNr, out Vehicle vehicle);
+						parking.ExportToFile(file);
+						ClearInput();
+						ShowLot();
+						FillTableLayout();
+					}
+					else if (DialogForm.SelectedButton == "Move")
+					{
+						MoveVehicle();
+					}
+				}
+            }
 		}
     }
 }
