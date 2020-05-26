@@ -121,12 +121,12 @@ namespace PraugeParkingFrontEnd
         private void Park()
         {
             string regNr = Input();
-            if (string.IsNullOrWhiteSpace(file) != true)
+            if (rbnCar.Checked == true && string.IsNullOrWhiteSpace(file) != true)
             {
                 Car car = new Car(regNr, DateTime.Now);
                 parking.AddVehicle(car);
             }
-            else if (string.IsNullOrWhiteSpace(file) != true)
+            else if (rbnMC.Checked == true && string.IsNullOrWhiteSpace(file) != true)
             {
                 Motorcycle mc = new Motorcycle(regNr, DateTime.Now);
                 parking.AddVehicle(mc);
@@ -291,7 +291,7 @@ namespace PraugeParkingFrontEnd
                                 }
                             }
                         }
-                        else
+                        else if (regNrList.Count == 1)
                             parking.RemoveVehicle(regNrList[0], out Vehicle _);
 
                         regNrList.Clear();

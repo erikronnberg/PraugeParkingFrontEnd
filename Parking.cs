@@ -175,9 +175,8 @@ namespace PraugeParkingFrontEnd
                     sw.Flush();
                 }
             }
-            catch (IOException ex)
+            catch (Exception ex)
             {
-                throw ex;
             }
         }
         /// <summary>
