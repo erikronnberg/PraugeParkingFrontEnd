@@ -62,6 +62,12 @@
     <Compile Include="Parking.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RemoveDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RemoveDialog.Designer.cs">
+      <DependentUpon>RemoveDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Vehicle.cs" />
     <EmbeddedResource Include="DialogForm.resx">
       <DependentUpon>DialogForm.cs</DependentUpon>
@@ -78,6 +84,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="RemoveDialog.resx">
+      <DependentUpon>RemoveDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

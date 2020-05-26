@@ -26,18 +26,29 @@ namespace PraugeParkingFrontEnd
             SelectedButton = btnAdd.Text;
             if (rbnMC.Checked == true)
                 mc = new Motorcycle(txtReg.Text, DateTime.Now);
-            if (rbnCar.Checked == true)
+            else if (rbnCar.Checked == true)
                 car = new Car(txtReg.Text, DateTime.Now);
+            btnAdd.DialogResult = DialogResult.OK;
         }
 
         private void btnRemove_Click(object sender, EventArgs e)
         {
             SelectedButton = btnRemove.Text;
+            if (rbnMC.Checked == true)
+                mc = new Motorcycle(txtReg.Text, DateTime.Now);
+            else if (rbnCar.Checked == true)
+                car = new Car(txtReg.Text, DateTime.Now);
+            btnRemove.DialogResult = DialogResult.OK;
         }
 
         private void btnMove_Click(object sender, EventArgs e)
         {
             SelectedButton = btnMove.Text;
+            if (rbnMC.Checked == true)
+                mc = new Motorcycle(txtReg.Text, DateTime.Now);
+            else if (rbnCar.Checked == true)
+                car = new Car(txtReg.Text, DateTime.Now);
+            btnMove.DialogResult = DialogResult.OK;
         }
     }
 }
