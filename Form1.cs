@@ -268,19 +268,17 @@ namespace PraugeParkingFrontEnd
                     }
                     else if (DialogForm.SelectedButton == "Remove")
                     {
-                        bool isCar = false;
                         foreach (Vehicle vehicle in parking[parkingSpot])
                         {
                             if (vehicle.Type == "CAR")
                             {
                                 parking.RemoveVehicle(vehicle.RegNr, out Vehicle _);
-                                isCar = true;
                                 break;
                             }
-                            else
+                            else if (vehicle.Type == "MC")
                                 regNrList.Add(vehicle.RegNr);
                         }
-                        if (isCar == false && regNrList.Count == 2)
+                        if (regNrList.Count == 2)
                         {
                             using (RemoveDialog removeDialog = new RemoveDialog())
                             {
