@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace PraugeParkingFrontEnd
@@ -20,7 +21,6 @@ namespace PraugeParkingFrontEnd
         public void ClearInput()
         {
             txtRegNummer.Clear();
-            label2.Text = "";
             rbnCar.Checked = false;
             rbnMC.Checked = false;
         }
@@ -193,6 +193,8 @@ namespace PraugeParkingFrontEnd
         {
             string regNr = Input();
             parking.RemoveVehicle(regNr, out Vehicle vehicle);
+            int cost = parking.CalculateCost(vehicle, DateTime.Now);
+            label2.Text = vehicle.RegNr + " kostade " + cost.ToString() + " kr";
             parking.ExportToFile(file);
             ClearInput();
             ShowLot();
@@ -273,6 +275,8 @@ namespace PraugeParkingFrontEnd
                             if (vehicle.Type == "CAR")
                             {
                                 parking.RemoveVehicle(vehicle.RegNr, out Vehicle _);
+                                int cost = parking.CalculateCost(vehicle, DateTime.Now);
+                                label2.Text = vehicle.RegNr + " kostade " + cost.ToString() + " kr";
                                 break;
                             }
                             else if (vehicle.Type == "MC")
@@ -286,13 +290,19 @@ namespace PraugeParkingFrontEnd
                                 {
                                     foreach (var item in removeDialog.removeVehicleList)
                                     {
-                                        parking.RemoveVehicle(item, out Vehicle _);
+                                        parking.RemoveVehicle(item, out Vehicle vehicle);
+                                        int cost = parking.CalculateCost(vehicle, DateTime.Now);
+                                        label2.Text += vehicle.RegNr + " kostade " + cost.ToString() + " kr";
                                     }
                                 }
                             }
                         }
                         else if (regNrList.Count == 1)
-                            parking.RemoveVehicle(regNrList[0], out Vehicle _);
+                        {
+                            parking.RemoveVehicle(regNrList[0], out Vehicle vehicle);
+                            int cost = parking.CalculateCost(vehicle, DateTime.Now);
+                            label2.Text = vehicle.RegNr + " kostade " + cost.ToString() + " kr";
+                        }
 
                         regNrList.Clear();
                         parking.ExportToFile(file);

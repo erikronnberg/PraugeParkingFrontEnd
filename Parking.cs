@@ -175,7 +175,7 @@ namespace PraugeParkingFrontEnd
                     sw.Flush();
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
         }
@@ -211,21 +211,27 @@ namespace PraugeParkingFrontEnd
                     }
                 }
             }
-            catch (FileNotFoundException e)
+            catch (Exception)
             {
-                throw e;
             }
         }
-        public static int CalculateCost(Vehicle vehicle, DateTime outTime)
+        public int CalculateCost(Vehicle vehicle, DateTime outTime)
         {
-            int timeParked = (int)outTime.Subtract(vehicle.EntryTime).TotalMinutes - 5;
-            if (timeParked >= 0)
+            try
             {
-                if (timeParked >= 120)
+                int timeParked = (int)outTime.Subtract(vehicle.EntryTime).TotalMinutes - 5;
+                if (timeParked >= 0)
                 {
-                    return vehicle.PricePerHour * (timeParked / 60);
+                    if (timeParked >= 120)
+                    {
+                        return vehicle.PricePerHour * (timeParked / 60);
+                    }
+                    return vehicle.PricePerHour * 2;
                 }
-                return vehicle.PricePerHour * 2;
+                return 0;
+            }
+            catch (Exception)
+            {
             }
             return 0;
         }
