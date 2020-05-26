@@ -150,6 +150,10 @@ namespace PraugeParkingFrontEnd
         {
             return this.squares.GetEnumerator();
         }
+        /// <summary>
+        /// Parses and saves the parking lot to a readable txt file
+        /// </summary>
+        /// <param name="filePath"></param>
         public void ExportToFile(string filePath)
         {
             try
@@ -176,6 +180,10 @@ namespace PraugeParkingFrontEnd
                 throw ex;
             }
         }
+        /// <summary>
+        /// Imports a text file and parses it into the parking class
+        /// </summary>
+        /// <param name="filePath"></param>
         public void ImportFromFile(string filePath)
         {
             for (int i = 0; i < squares.Length; i++)

@@ -57,6 +57,9 @@ namespace PraugeParkingFrontEnd
             return string.Empty;
         }
 
+        /// <summary>
+        /// Shows all current vehicles parked in a datagridview
+        /// </summary>
         public void ShowLot()
         {
             dgwParking.Rows.Clear();
@@ -72,6 +75,10 @@ namespace PraugeParkingFrontEnd
             }
         }
 
+        /// <summary>
+        /// Cleans input data
+        /// </summary>
+        /// <returns></returns>
         public string Input()
         {
             if (string.IsNullOrEmpty(file)) MessageBox.Show("No file open, either open one or create a new one", "File not found");
@@ -87,6 +94,11 @@ namespace PraugeParkingFrontEnd
             if (string.IsNullOrEmpty(file)) MessageBox.Show("Could not create the file");
         }
 
+        /// <summary>
+        /// Opens a file dialog to load a saved parking lot into memory
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void öppnaToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             file = OpenDialog();
@@ -103,16 +115,18 @@ namespace PraugeParkingFrontEnd
         {
             Application.Exit();
         }
-
+        /// <summary>
+        /// Takes user input and adds vehicle to parkinglot
+        /// </summary>
         private void Park()
         {
             string regNr = Input();
-            if (rbnCar.Checked == true && string.IsNullOrWhiteSpace(file) != true)
+            if (string.IsNullOrWhiteSpace(file) != true)
             {
                 Car car = new Car(regNr, DateTime.Now);
                 parking.AddVehicle(car);
             }
-            else if (rbnMC.Checked == true && string.IsNullOrWhiteSpace(file) != true)
+            else if (string.IsNullOrWhiteSpace(file) != true)
             {
                 Motorcycle mc = new Motorcycle(regNr, DateTime.Now);
                 parking.AddVehicle(mc);
@@ -123,24 +137,32 @@ namespace PraugeParkingFrontEnd
             FillTableLayout();
         }
 
+        /// <summary>
+        /// Moves a vehicle to the first empty spot in the lot
+        /// </summary>
         private void MoveVehicle()
         {
+            //User input to decide which vehicle to move
             string regNr = Input();
-            int originalPosition = parking.SearchVehicle(regNr); //kollar om den finns
+            //Finds the current spot of the vehicle
+            int originalPosition = parking.SearchVehicle(regNr);
             if (originalPosition >= 0)
             {
-                int spot = parking.RemoveVehicle(regNr, out Vehicle vehicle); //får ut vehicle object genom att remove'a
+                //removes the vehicle to get the time of parking
+                //and then adds a temporary vehicle in its place to then
+                //add the vehicle to its new spot
+                int spot = parking.RemoveVehicle(regNr, out Vehicle vehicle);
                 Motorcycle _temp = new Motorcycle("_TEMP");
                 parking.AddVehicle(_temp, spot);
                 if (vehicle.Type == "CAR")
                 {
                     Car car = new Car(regNr, vehicle.EntryTime);
-                    parking.AddVehicle(car); //parkerar automatiskt
+                    parking.AddVehicle(car);
                 }
                 else if (vehicle.Type == "MC")
                 {
                     Motorcycle mc = new Motorcycle(regNr, vehicle.EntryTime);
-                    parking.AddVehicle(mc); //parkerar automatiskt
+                    parking.AddVehicle(mc);
                 }
                 parking.RemoveVehicle(_temp.RegNr, out Vehicle temp);
                 parking.ExportToFile(file);
@@ -182,6 +204,10 @@ namespace PraugeParkingFrontEnd
             ShowLot();
         }
 
+        /// <summary>
+        /// Sets the parkingspots in the layout panel to their correct colours
+        /// depending on the capacity of the parking spot
+        /// </summary>
         public void FillTableLayout()
         {
             int i = 0;
@@ -213,10 +239,18 @@ namespace PraugeParkingFrontEnd
             }
         }
 
+        /// <summary>
+        /// Click event for the table layout panels parking spots
+        /// Creates a new dialog window for user input and 
+        /// either adds, removes or moves vehicles based on
+        /// clicked parkingspot
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void SpotClicked(object sender, EventArgs e)
         {
             Label iconLabel = sender as Label;
-            bool success = int.TryParse(iconLabel.Name, out int x);
+            bool success = int.TryParse(iconLabel.Name, out int parkingSpot);
             using (DialogForm dialog = new DialogForm())
             {
                 if (dialog.ShowDialog(this) == DialogResult.OK && success == true)
@@ -224,9 +258,9 @@ namespace PraugeParkingFrontEnd
                     if (DialogForm.SelectedButton == "Add")
                     {
                         if (dialog.car != null)
-                            parking.AddVehicle(dialog.car, x);
+                            parking.AddVehicle(dialog.car, parkingSpot);
                         else if (dialog.mc != null)
-                            parking.AddVehicle(dialog.mc, x);
+                            parking.AddVehicle(dialog.mc, parkingSpot);
                         parking.ExportToFile(file);
                         ClearInput();
                         ShowLot();
@@ -234,12 +268,8 @@ namespace PraugeParkingFrontEnd
                     }
                     else if (DialogForm.SelectedButton == "Remove")
                     {
-                        //if (dialog.car != null)
-                        //    parking.RemoveVehicle(dialog.car.RegNr, out Vehicle _);
-                        //else if (dialog.mc != null)
-                        //    parking.RemoveVehicle(dialog.mc.RegNr, out _);
                         bool isCar = false;
-                        foreach (Vehicle vehicle in parking[x])
+                        foreach (Vehicle vehicle in parking[parkingSpot])
                         {
                             if (vehicle.Type == "CAR")
                             {
@@ -275,9 +305,9 @@ namespace PraugeParkingFrontEnd
                     else if (DialogForm.SelectedButton == "Move")
                     {
                         if (dialog.car != null)
-                            parking.MoveVehicle(dialog.car.RegNr, x);
+                            parking.MoveVehicle(dialog.car.RegNr, parkingSpot);
                         if (dialog.mc != null)
-                            parking.MoveVehicle(dialog.mc.RegNr, x);
+                            parking.MoveVehicle(dialog.mc.RegNr, parkingSpot);
                         parking.ExportToFile(file);
                         ClearInput();
                         ShowLot();
